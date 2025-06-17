@@ -25,13 +25,14 @@
     "react-super-responsive-table": "^5.2.1",
     "react-type-animation": "^3.0.1",
     "redux-toolkit": "^1.1.2",
+    "server": "file:..",
     "swiper": "^9.4.1",
     "video-react": "^0.16.0",
     "web-vitals": "^2.1.4"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thepranaygupta/react-tailwind-css-starter-pack.git"
+    "url": "git+https://github.com/Omji-Kesharwani/ELearning.git"
   },
   "author": "Omji Kesharwani",
   "scripts": {

@@ -45,8 +45,8 @@ export async function buyCourse(token, courses, userDetails, navigate, dispatch)
         if(!orderResponse.data.success) {
             throw new Error(orderResponse.data.message);
         }
-        console.log("PRINTING orderResponse", orderResponse);
-        //options
+        // console.log("PRINTING orderResponse", orderResponse);
+        // //options
         const options = {
             key: process.env.RAZORPAY_KEY,
             currency: orderResponse.data.message.currency,

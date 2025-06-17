@@ -1,5 +1,7 @@
 const express = require("express");
 const app = express();
+const path =require("path")
+
 
 const userRoutes = require("./routes/User");
 const profileRoutes = require("./routes/Profile");
@@ -14,6 +16,7 @@ const fileUpload = require("express-fileupload");
 const dotenv = require("dotenv");
 
 dotenv.config();
+const _dirname = path.resolve();
 const PORT = process.env.PORT || 4000;
 
 //database connect
@@ -46,12 +49,21 @@ app.use("/api/v1/reach", contactUsRoute);
 
 //def route
 
-app.get("/", (req, res) => {
-	return res.json({
-		success:true,
-		message:'Your server is up and running....'
-	});
+// app.get("/", (req, res) => {
+// 	return res.json({
+// 		success:true,
+// 		message:'Your server is up and running....'
+// 	});
+// });
+
+
+app.use(express.static(path.join(_dirname,"frontend","build")))
+
+
+app.get('*',(_,res)=>{
+	res.sendFile(path.resolve(_dirname,"frontend","build","index.html"))
 });
+
 
 app.listen(PORT, () => {
 	console.log(`App is running at ${PORT}`)
