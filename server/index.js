@@ -16,7 +16,8 @@ const fileUpload = require("express-fileupload");
 const dotenv = require("dotenv");
 
 dotenv.config();
-const _dirname = path.resolve();
+const _dirname = __dirname;
+
 const PORT = process.env.PORT || 4000;
 
 //database connect
@@ -57,11 +58,10 @@ app.use("/api/v1/reach", contactUsRoute);
 // });
 
 
-app.use(express.static(path.join(_dirname,"frontend","build")))
+app.use(express.static(path.join(_dirname, "../frontend/build")));
 
-
-app.get('*',(_,res)=>{
-	res.sendFile(path.resolve(_dirname,"frontend","build","index.html"))
+app.get("*", (_, res) => {
+  res.sendFile(path.join(_dirname, "../frontend/build", "index.html"));
 });
 
 
