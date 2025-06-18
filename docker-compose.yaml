@@ -26,8 +26,6 @@ services:
        - "3000:3000"
      networks:
        - mern
-     environment:
-       BASE_URL : ${BASE_URL}
 
 
   mongodb:
