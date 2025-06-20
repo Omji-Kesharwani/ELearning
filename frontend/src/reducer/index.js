@@ -6,6 +6,7 @@ import cartReducer from "../slices/cartSlice"
 import courseReducer from "../slices/courseSlice"
 import viewCourseReducer from "../slices/viewCourseSlice"
 
+//This is the root reducer that combines all the slices
 const rootReducer  = combineReducers({
     auth: authReducer,
     profile:profileReducer,
