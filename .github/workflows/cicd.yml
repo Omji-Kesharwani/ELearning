@@ -28,10 +28,9 @@ jobs:
     needs: filter
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy Frontend
-        if: needs.filter.outputs.frontend == 'true'
-        run: curl -X POST ${{ secrets.FRONTEND_DEPLOY_HOOK }}
-
-      - name: Deploy Backend
-        if: needs.filter.outputs.backend == 'true'
-        run: curl -X POST ${{ secrets.BACKEND_DEPLOY_HOOK }}
+     - name: Deploy Frontend
+       if: needs.filter.outputs.frontend == 'true' && secrets.FRONTEND_DEPLOY_HOOK != ''
+       run: curl -X POST "${{ secrets.FRONTEND_DEPLOY_HOOK }}"
+     - name: Deploy Backend
+       if: needs.filter.outputs.backend == 'true' && secrets.BACKEND_DEPLOY_HOOK != ''
+       run: curl -X POST "${{ secrets.BACKEND_DEPLOY_HOOK }}"
