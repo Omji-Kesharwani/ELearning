@@ -5,7 +5,9 @@
   "main": "server/index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend"
+    "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend",
+    "test": "nyc --reporter=lcov mocha",
+  "coverage": "nyc report --reporter=text-lcov | codecov"
   },
   "keywords": [],
   "author": "",
@@ -27,5 +29,9 @@
     "nodemon": "^2.0.22",
     "otp-generator": "^4.0.1",
     "razorpay": "^2.8.6"
+  },
+  "devDependencies": {
+    "codecov": "^3.8.2",
+    "nyc": "^17.1.0"
   }
 }

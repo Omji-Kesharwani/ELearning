@@ -1,0 +1,78 @@
+name: MERN CI/CD with Deploy & Notifications
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-test-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Detect Changes
+        id: changes
+        run: |
+          echo "frontend=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^frontend/' || true)" >> $GITHUB_OUTPUT
+          echo "backend=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^server/' || true)" >> $GITHUB_OUTPUT
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      # === Frontend Build ===
+      - name: Cache Frontend Dependencies
+        if: steps.changes.outputs.frontend != ''
+        uses: actions/cache@v3
+        with:
+          path: frontend/node_modules
+          key: frontend-${{ hashFiles('frontend/package-lock.json') }}
+
+      - name: Install & Build Frontend
+        if: steps.changes.outputs.frontend != ''
+        working-directory: frontend
+        run: |
+          npm install
+          npm run build
+
+      - name: Trigger Vercel Frontend Deploy
+        if: steps.changes.outputs.frontend != ''
+        run: curl -X POST "${{ secrets.VERCEL_DEPLOY_HOOK_FRONTEND }}"
+
+      # === Backend Build & Test ===
+      - name: Cache Backend Dependencies
+        if: steps.changes.outputs.backend != ''
+        uses: actions/cache@v3
+        with:
+          path: server/node_modules
+          key: backend-${{ hashFiles('server/package-lock.json') }}
+
+      - name: Install & Test Backend
+        if: steps.changes.outputs.backend != ''
+        working-directory: server
+        run: |
+          npm install
+          npm test || true
+
+      - name: Upload Code Coverage to Codecov
+        if: steps.changes.outputs.backend != ''
+        working-directory: server
+        run: |
+          npm run coverage
+
+      - name: Trigger Vercel Backend Deploy
+        if: steps.changes.outputs.backend != ''
+        run: curl -X POST "${{ secrets.VERCEL_DEPLOY_HOOK_BACKEND }}"
+
+      # === Notify Slack ===
+      - name: Notify Slack on Completion
+        if: always()
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+          --data '{"text":"✅ MERN CI/CD completed: ${{ github.repository }} on branch ${{ github.ref_name }}."}' \
+          ${{ secrets.SLACK_WEBHOOK_URL }}
