@@ -1,3 +1,4 @@
+// This is the backend url for the project
 const BASE_URL = `${process.env.REACT_APP_BASE_URL}/api/v1`
 
 // AUTH ENDPOINTS
