@@ -16,7 +16,7 @@ const fileUpload = require("express-fileupload");
 const dotenv = require("dotenv");
 
 dotenv.config();
-const _dirname = __dirname;
+// const _dirname = __dirname;
 
 const PORT = process.env.PORT || 4000;
 
@@ -27,7 +27,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
 	cors({
-		origin:"*",
+		origin:"http://localhost:3000",
 		credentials:true,
 	})
 )
@@ -58,11 +58,11 @@ app.get("/", (req, res) => {
 });
 
 
-app.use(express.static(path.join(_dirname, "../frontend/build")));
+// app.use(express.static(path.join(_dirname, "../frontend/build")));
 
-app.get("*", (_, res) => {
-  res.sendFile(path.join(_dirname, "../frontend/build", "index.html"));
-});
+// app.get("*", (_, res) => {
+//   res.sendFile(path.join(_dirname, "../frontend/build", "index.html"));
+// });
 
 
 app.listen(PORT, () => {
